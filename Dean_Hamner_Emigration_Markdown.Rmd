@@ -1,0 +1,356 @@
+---
+title: "Determinants of Emigration Rates by Skill Level"
+author: | 
+  | Dean Hamner
+  | The University of Alabama
+date: "11/6/2021"
+output:
+  pdf_document: 
+  header-includes:
+    - \usepackage{indentfirst}
+indent: true
+ 
+---
+\newpage
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Abstract
+
+|     As migration because more feasible and commonplace, so too do the effects become more pronounced. The goal of this paper is to analyze the causes of emigration of people of low, medium, and high skill levels using cross sectional data from 2010. Using an OLS model and Beta Regression model, I regress the emigration rate of each skill level from each county against various political and economic conditions that could reasonably be thought to impact migration. The distribution of national emigration rates by gender is also considered. I interpret the results of the model and make general policy considerations. Low-skilled emigration is affected by government regulation on business, the rate enrollment in education beyond high school, weighted average tariff rates, and the difficulty of asset trading. Medium-Skilled emigration is affected by domestic credit to private sector as a percentage of GDP and difficulty of asset trading. High-skilled emigration is affected by the rate enrollment in education beyond high school and difficulty of asset trading.I discuss the significance of each of these, as 
+
+```{r dataload, echo=FALSE}
+tab1 <- readxl::read_excel("C:/Users/deanh/Desktop/Delta Presentation/iabbd_8010_v1_emigration-2.xls")
+##It also took some time to get and clean the data, but I did not put that in this document.
+```
+
+## Introduction
+
+|     Nation-states have a significant interest in controlling the flow of emigration. Particularly, reducing the number of high-skilled emigrants such that they remain and work in their native country can play a key role in giving those states a competitive edge in innovation and economic development. In fact, research has shown that emigration of high-skilled workers from developing countries has negative consequences for the economic welfare of the states which emigrants leave behind (Bhagwati and Koichi, 1974).These countries face difficulty in competing with others like the United States and European countries in retaining high-skilled labor. Without the positive externalities of such individuals, economic development could be slowed relative to those states which better retain of individuals who are highly educated or have highly specialized skills. 
+
+
+\vspace{.5cm}Also of significance are the determinants of low and medium skilled emigration. Developed nations which have a lower ratio of low-skilled to high-skilled labor have an interest in maintaining certain domestic industries such as agriculture and manufacturing. However, in order for such sectors to thrive in developed countries, their products must be sold at lower prices which can compete with foreign goods. Maintaining a supply of low-skilled to mid-skilled labor can keep wages and thus the prices of products for those industries lower, increasing the purchasing power of domestic consumers (Cortes, 2008).  As such, states not only have an interest in controlling high-skilled emigration, but also in controlling low and mid-skilled emigration. 
+
+
+\vspace{.5cm}The purpose of this paper is to analyze factors which contribute to people of all skill levels choosing to leave their native countries for another. Rather than looking at the specific policies of every states, I will use the political and economic environments that were created by the totality of each nation's policies. Based on how these environmental factors affect emigration rates at all levels of skill, states can make policy changes to improve the environment which contributes the most to high emigration rates of whatever skill level they wish to control. This paper will be a preliminary analysis based on cross-sectional data due to the lack of availability of certain measurements and due to how the effects of policies change over due to factors such as immigration laws and ease of travel. If this analysis yields notable results, it would be worth it to give the data a panel interpretation based on my results, using data from previous decades.
+
+## Previous Literature
+
+|  There is a multitude of research on the effects of emigration, especially those of high skill level. Clemens, 2011 highlights the importance of keeping high end talent in particular within a state's borders. Every high-skilled individual that leaves their country of origin costs that country thousands of dollars in productivity and public fiance. However, at least relative to the effects of emigration, research into the actual causes of emigration are relatively limited. This is because those causes can be difficult to quantify, and policy changes can have a high variance in results depending on each nation's circumstances. Nevertheless, there had indeed been a solid amount of research into the topic. Bang & Mitra, 2013 found that civil war, especially ethnic conflict, increases high-skilled emigration rates significantly.  Martin & Termos, 2015, found that a higher minimum wage caused increased emigration of low skilled labor, while it did not effect emigration of high-skilled labor. The issue with research such as this is that it examines specific actions or policy changes enacted by a political actor in society, usually the state or other national organization. This can be problematic because nations have societies and economic systems which can develop vastly different economic effects compared to a similar policy change in another country. As an example within the United States, a minimum wage increase at the federal level would have vastly different effects on states such a Mississippi, which have no state-mandated minimum wage, and California, which already has a minimum wage higher than the current federal level. Because it can be difficult to control for all such factors that influence the effects of a policy change, for this paper, I do not examine specific policies of various countries. 
+
+\vspace{.5cm}Kazlauskienė & Rinkevičius, 2006 examined the push-pull factors of emigration to and from Lithuania. In their research, rather than looking into specific policy changes, they instead examined macroeconomic conditions, as well as other factors such political and familial ties and ecology. They correctly concluded that the cases of emigration are complex and determined by a multitude of local economic, social, and political conditions. This is an advantageous way of examining emigration rates, because it shows how the conditions created by the policies themselves influence emigration. Since policies have different effects for each state, knowing the proper conditions to manipulate can allow leaders to make country-specific decisions based on their own countries economic and political infrastructure, rather than hoping that a specific policy that succeeded for one country will work for another. In this paper, I will use a similar method; I will examine the economic environments themselves in which countries are operating in as factors determining emigration rates as an alternative to policies. I will indeed speak to generalizations in which policy could be used to influence each factor but will not make specific recommendations. 
+
+## Preleminary Analysis of Emigration Rates
+
+|     Emigration rates come from the Institute for Employment Research. For any given skill level and year, the emigration rate is defined as the total migrant population from a given source country divided by the sum of the migrant and resident population in the same source country. low skilled migrants are those who have completed education at a level lower than high school, medium skilled migrants are those who have completed high school or an equivalent, and high skilled migrants are those who have completed education beyond high school (Brücker et al., 2013). These will be regressed against various political and economic indicators which come from the Global Innovation Index, which has compiled data from 2010 from the World Economic Forum, UNESCO, the World Bank, and others for each country (INSEAD and WIPO, 2010). 
+
+\vspace{.5cm}
+Because there exists a gap in the educational attainment between men and women in many countries (OCED, 2019), it is reasonable to speculate that there is a significant difference in emigration rates between men and women. If there are institutional barriers to either gender finding employment, or if there is a disproportionate amount of the number of men or women at a certain skill level that affects supply, it is likely that emigration rates will be differ between men and women. As that is relevant to this research, I will conduct a Wilcox Rank-Sum Test to determine if there is a significant difference in the distribution of emigration rates between men and women at all levels: 
+\newpage
+$$Wilcox\:Rank\:Sum\:Test:$$
+$$\mathrm H_0: The\:distributions\:between\:male\:and\:female\:emigration\:rates\:are\:equal.$$
+$$\mathrm H_A: The\:distributions\:between\:male\:and\:female\:emigration\:rates\:are\:not\:equal.$$
+```{r gender test, echo=FALSE, cache=TRUE}
+pval1 <- wilcox.test(tab1$Low_Men, tab1$Low_Woman)$p.value
+pval2 <- wilcox.test(tab1$Mid_Men, tab1$Mid_Women)$p.value
+pval3 <- wilcox.test(tab1$High_Men, tab1$High_Women)$p.value
+pvalvec <- c(pval1, pval2, pval3)
+skillvec <- c("Low Skilled", "Mid Skilled", "High Skilled")
+knitbl <- knitr::kable(as.table(setNames(pvalvec, skillvec)), col.names = c("Skill Level", "P-Values from Wilcox Rank-Sum Test"), caption = "Wilcox Test")
+knitbl
+```
+These results indicate that there is not a significant difference between male and female emigration rates at any level. As such, it is not fit to run separate models for men and women.
+
+\vspace{.5cm}
+Prior to this analysis, due to the nature of using individual countries as observations, it was obvious that there would be several outliers in regard to emigration rates. many states such as Nauru and Liechtenstein naturally have highly variable emigration rates due to their small size alone making it unfeasible for government policy to have a significant impact. I could have included interaction terms between size and economic environments, but given the small sample size, I believe it is not appropriate to include them at this time. Additionally, several countries were dropped due to insufficient data, typically due to many of the independent variable measurements not being available. All countries are included except the following: Afghanistan, Algeria, Andorra, Angola, Antigua and Barbuda, Bahamas, Belarus, Belize, Bhutan, Cape Verde, Central African Republic, Comoros, D. R. Congo, Cuba, Djibouti, Dominica, Equatorial Guinea, Eritrea, Fiji, Gabon, Grenada, Guinea, Guinea - Bissau, Haiti, Vatican, Iran, Iraq, Kiribati, Laos, Lebanon, Liberia, Liechtenstein, Maldives, Marshal Islands, Micronesia, Moldova, Monaco, Montenegro, Burma, Nauru, Niger, Palau, Papua New Guinea, Rwanda, Saint Kitts and Nevis, Saint Lucia, Saint Vincent and the Grenadines, Samoa, San Marino, Sao Tome and Principe, Seychelles, Sierra Leone, Solomon Islands, Somolia, Sudan, Swaziland, Togo, Tonga, Turkmenistan, Tuvalu, Uzbekistahn, Vanuatu, and Yemen.
+
+
+\vspace{.5cm}Even with the emigration rates of likely outlier countries dropped,the distribution of the rates at all levels was heavily skewed right:  
+```{r normal plots not transformed, warning=FALSE, echo=FALSE, fig.width=3, fig.height=3}
+library(ggplot2)
+pl1 <- ggplot(data=tab1, aes(Low_All))+geom_histogram(fill="red", bins =20, alpha=.2)+labs(title = "Low Skilled", x = "Emigration Rate", y="Count")+xlim(c(0,.55))+ylim(c(0,30))
+pl2 <- ggplot(data=tab1, aes(Med_All))+geom_histogram(fill="green", bins =30, alpha=.2)+labs(title = "Mid Skilled", x = "Emigration Rate", y="Count")+xlim(c(0,.55))+ylim(c(0,30))
+pl3 <- ggplot(data=tab1, aes(High_All))+geom_histogram(fill="blue", bins =20, alpha=.2)+labs(title = "High Skilled", x = "Emigration Rate", y="Count")+xlim(c(0,.55))+ylim(c(0,30))
+pl1
+pl2
+pl3
+```
+
+
+\vspace{.5cm}As such, it is necessary to perform a variable transformation on each level such that their distributions are approximately normal in order to use an OLS model. Because the skewness is so great, I applied a third root transformation to all three distributions:  
+```{r normal plots transformed, message=FALSE, warning=FALSE, echo=FALSE, fig.width=3, fig.height=3}
+library(dplyr)
+library(tidyverse)
+Ql1 <- quantile(tab1$Low_All, .25)
+Ql2 <- quantile(tab1$Low_All, .75)
+IQRl <- IQR(tab1$Low_All)
+no_out_low <- subset(tab1, tab1$Low_All > (Ql1 - 1.5*IQRl) & tab1$Low_All < (Ql2 + 1.5*IQRl))
+Qm1 <- quantile(tab1$Med_All, .25)
+Qm2 <- quantile(tab1$Med_All, .75)
+IQRm <- IQR(tab1$Med_All)
+no_out_med <- subset(tab1, tab1$Med_All > (Qm1 - 1.5*IQRm) & tab1$Med_All < (Qm2 + 1.5*IQRm))
+Qh1 <- quantile(tab1$High_All, .25)
+Qh2 <- quantile(tab1$High_All, .75)
+IQRh <- IQR(tab1$High_All)
+no_out_high <- subset(tab1, tab1$High_All > (Qh1 - 1.5*IQRh) & tab1$High_All < (Qh2 + 1.5*IQRh))
+tabl2 <- mutate(no_out_low, Low_All3 = Low_All^(1/3))
+tabl2 <- mutate_if(tabl2, is.numeric, funs(replace(., is.na(.), mean(., na.rm = TRUE))))
+tabm2 <- mutate(no_out_med, Med_All3 = Med_All^(1/3))
+tabm2 <- mutate_if(tabm2, is.numeric, funs(replace(., is.na(.), mean(., na.rm = TRUE))))
+tabh2 <- mutate(no_out_high, High_All3 = High_All^(1/3))
+tabh2 <- mutate_if(tabh2, is.numeric, funs(replace(., is.na(.), mean(., na.rm = TRUE))))
+pl4 <- ggplot(data=tabl2, aes(Low_All3))+geom_histogram(fill="red", bins =20, alpha=.2)+labs(title = "Low Skilled", x = "Emigration Rate", y="Count")+xlim(c(0,.6))+ylim(c(0,30))
+pl5 <- ggplot(data=tabm2, aes(Med_All3))+geom_histogram(fill="green", bins =20, alpha=.2)+labs(title = "Mid Skilled", x = "Emigration Rate", y="Count")+xlim(c(0,.6))+ylim(c(0,30))
+pl6 <- ggplot(data=tabh2, aes(High_All3))+geom_histogram(fill="blue", bins =20, alpha=.2)+labs(title = "High Skilled", x = "Emigration Rate", y="Count")+xlim(c(.1,.8))+ylim(c(0,30))
+pl4
+pl5
+pl6
+```
+
+
+\vspace{.5cm}Even after transformation, the low and med skilled distributions both appear as if they are still not normal. However, the Jarque-Bera Test confirmed normality at a .05 significance level for all distributions:
+$$Jarque-Bera\:Normality\:Test:$$
+$$\mathrm H_0: The\:data\:is\:normally\:distributed.$$
+$$\mathrm H_A: The\:data\:is\:not\:normally\:distributed.$$
+```{r normal test, message=FALSE, echo=FALSE}
+library(tseries)
+pval4 <- jarque.bera.test(no_out_low$Low_All^(1/3))$p.value
+pval5 <- jarque.bera.test(no_out_med$Med_All^(1/3))$p.value
+pval6 <- jarque.bera.test(no_out_high$High_All^(1/3))$p.value
+pvalvec2 <- c(pval4, pval5, pval6)
+knitbl2 <- knitr::kable(as.table(setNames(pvalvec2, skillvec)), col.names = c("Skill Level", "P-Values from Jarque-Bera Test"), caption = "Jarque-Bera Test")
+knitbl2
+```
+
+
+\vspace{.5cm}While not ideal, the third root transformation produced better results than the arcsin transformation, which is traditionally used to normalize proportional data. 
+
+## Vairble Explanations
+
+|     In order to measure indicators of political and economic environments that encourage migration, I will use the GII's method of normalization, which sets each indicator on a scale of 1 to 7, with 1 indicating the "worst" outcome and 7 being a "best" outcome, using the following formulas: For data in which a higher value indicates a positive outcome:
+$$
+Normalized\:Score = \frac{6*(Raw\:Country\:Score\:-\:Sample\:Minimum)}{Sample\:Maximum\:-\:Sample\:Minimum)} + 1
+$$
+  For data in which a higher value indicates a negative outcome:
+$$
+Normalized\:Score = \frac{-6*(Raw\:Country\:Score\:-\:Sample\:Minimum)}{Sample\:Maximum\:-\: Sample\:Minimum)} + 7
+$$
+
+\vspace{.5cm}For example, higher values of 'total business density' are generally considered positive, so we use positive normalization, while higher values of the gini coefficient are considered negative, so we use negative normalization. The state with the highest business density will have a score of 7, and the state with the highest gini coefficient will have a score of 1. Definitions for each variable can be found in the appendix.
+
+
+\vspace{.5cm}The variable 'political stability' is used primarily as a control, because states with an unstable government might be expected to have higher emigration rates at all levels. 'Government Effectiveness,' 'Regulatory Quality,' and 'Burden of Government Regulation,' are quite similar, and will be tested for multicollinearity. However, including these will help control for government corruption, and could be useful in capturing those that leave the country for a better business environment. 'Education expenditure' measures investment in education, and 'extent of staff training' could capture those who might leave or stay based on industry entrance requirements. 'Enrollment in tertiary education' shows both the cultural and economic importance of building skills in the country at hand. 'Research and development expenditure' correlates with economic innovation, which could effect people's economic prospects in their country of residence. 'Trade weighted average tariff rate' captures the indirect effect of protectionism. 'Local availability of specialized research and training services' is used as a measure of local economic opportunity. 'Total business density' captures factors such as barriers to entry and economic competitiveness. The Gini coefficient is simply a measure of inequality. 'Domestic credit to Private Sector GDP' indicates aggressive and active participation of the banking sector in the real economy. 'Financing through local equity market' indicates how easy is it for companies to raise money by issuing shares on the stock market. Only a few of these variables will show significance, but they will be effective as controls.
+
+## Addressing Multicollinearity 
+
+Upon running the OLS model, it became apparent multicollinearity is a major issue for all three skill levels, as shown by the variance inflation factors below:
+
+```{r models and multicollinearity, message=FALSE, warning=FALSE, echo=FALSE, results='asis'}
+library(car)
+ml1 <- lm(Low_All3~`Political Stability`+`Government Effectiveness`+`Regulatory Quality`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Extent of Staff Training`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Local Availability of Specialized Research and Training Services`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabl2)
+mm1 <- lm(Med_All3~`Political Stability`+`Government Effectiveness`+`Regulatory Quality`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Extent of Staff Training`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Local Availability of Specialized Research and Training Services`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabm2)
+mh1 <- lm(High_All3~`Political Stability`+`Government Effectiveness`+`Regulatory Quality`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Extent of Staff Training`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Local Availability of Specialized Research and Training Services`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabh2)
+vifsl<- vif(ml1) %>% 
+  tibble(.) %>%
+  mutate(Term = names(vif(ml1)), `Low Skilled`=vif(ml1), `Med Skilled`=vif(mm1), `High Skilled`=vif(mh1)) %>%
+  select(Term, `Low Skilled`, `Med Skilled`, `High Skilled`)
+knitr::kable(vifsl, caption = "Initial VIF Output")
+```
+
+
+\vspace{.5cm}The variables 'regulatory quality,' 'government effectiveness,' 'local availability of specialized research and training services,' and to a lesser degree, 'extent of staff training.' all had high VIF values, indicating likely multicollinearity. Government effectiveness and regulatory quality are closely related; that is, a more effective government can reasonably be assumed to produce a regulatory framework that is more stable and effective than ineffective governments. Moreover, the variable, 'burden of government regulation,' already captures some information implied by the 'regulatory quality' variable. For example, a state with less-burdensome regulation will  maintain a high country score in both categories, as excessive burden is a part of the 'regulatory quality' measure. Because there is a similar variable that captures some of the effect of 'regulatory quality, government effectiveness,' I dropped both of them from the model. 'Local availability of specialized research and training services' and 'extent of staff training' give similar information as well, which is self-explanatory. Initially, I only dropped the former, but 'extent of staff training' still had a high VIF value afterwards. As such, in order to maintain model robustness, I dropped both of those variables as well. The following are the updated variance inflation factors for each variable for all three levels:
+
+```{r models and multicollinearity2, message=FALSE, warning=FALSE, echo=FALSE, results='asis'}
+ml2 <- lm(Low_All3~`Political Stability`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabl2)
+mm2 <- lm(Med_All3~`Political Stability`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabm2)
+mh2 <- lm(High_All3~`Political Stability`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabh2)
+vifsl<- vif(ml2) %>% 
+  tibble(.) %>%
+  mutate(Term = names(vif(ml2)), `Low Skilled`=vif(ml2), `Med Skilled`=vif(mm2), `High Skilled`=vif(mh2)) %>%
+  select(Term, `Low Skilled`, `Med Skilled`, `High Skilled`)
+knitr::kable(vifsl, caption = "Multicollinearity-Corrected VIF Output")
+```
+
+## OLS Results  
+
+|     The first group of models run was the set of three Ordinary Least Squared models with the dependent variable being the third root of emigration rates and the independent variables being those that were kept in the model after the multicollinearity correction. Each skill level is regressed as a separate dependent variable with the same independent variables. Because of the relatively high number of independent variables used relative to the number of observations in the dataset, I did not include any interaction terms or similar adjustments. There is a discrepancy in the number of observations due to the fact that some countries which were dropped in some iterations for being heavy outliers were not so at all in other iterations. To verify model robustness, in addition to the results of the OLS model, I have included a Breusch-Pagan Test to determine if heteroscedasticity is present below:
+\vspace{.5cm}
+```{r OLS, message=FALSE, warning=FALSE, echo=FALSE, results='asis'}
+library("tinytex")
+library("stargazer")
+library("sandwich")
+library(lmtest)
+model.lst = list(ml2, mm2, mh2)
+stargazer::stargazer(ml2,
+          mm2,
+          mh2,
+          title="OLS Results by Skill Level",
+          type = "latex",
+          float = TRUE,
+          report = "vcs*",
+          se=lapply(model.lst, function(x) sqrt(diag(vcovHC(x, type = "HC1")))),
+          no.space = TRUE,
+          header=FALSE,
+          single.row = TRUE,
+          font.size = "small",
+          intercept.bottom = F,
+          column.labels = c("Low Skilled", "Med Skilled", "High Skilled"),
+          column.separate = c(1,1, 1),
+          digits = 2,
+          t.auto = F,
+          p.auto = F,
+          notes.align = "l",
+          notes.append = TRUE
+          )
+pvalhl <- bptest(ml2)$p.value
+pvalhm <- bptest(mm2)$p.value
+pvalhh <- bptest(mh2)$p.value
+pvalvech <- c(pvalhl, pvalhm, pvalhh)
+knitblh <- knitr::kable(as.table(setNames(pvalvech, skillvec)), col.names = c("Model Iteration", "P-Values from Breusch-Pagan test"), caption = "Breusch-Pagan test for heteroscedasticity")
+```
+\vspace{1cm}
+$$Breusch-Pagan\:Test:$$
+$$\mathrm H_0: Heteroscedasticity\:is\:not\:present.$$
+$$\mathrm H_A: Heteroscedasticity\:is\:present.$$
+```{r het test,  message=FALSE, warning=FALSE, echo=FALSE, results='asis'}
+knitblh
+```
+
+  
+\vspace{1cm}Despite all three model iterations having a relatively low R-squared value, they do provide valuable insights without showing evidence of heteroscedasticity. The low and medium-skilled iterations were significant at a 99% confidence level, and the high-skilled iteration was significant at a 90% level. Interestingly, the low-skilled iteration had a higher F-statistic than did the med-skilled iteration, which had a higher F-statistic then the high-skilled iteration. The same pattern can be seen when examining the R-squared values. This implies that as one becomes more skilled, their decision of whether or not to emigrate becomes more difficult to influence based on the factors in the model. When analyzing these results, it is important to note the scaling and transformation of the data. The coefficient corresponds to the change in the third root of the emigration rate for each 1 point increase in a country's score. For instance, if a variable's coefficient is .03, on average, as a country's score in a category increases by 1 point, the third root of the low-skilled emigration rate decreases by .03, holding all else constant. Therefore, after adjusting for the transformation, if a country had a low-skilled emigration rate of 20%, and their country score increased by 1, their emigration rate would decrease to about 17% holding all else constant.
+
+\vspace{.5cm}'Burden of Government Regulation' had a significant, negative effect low-skilled emigration rates.On the scoring scale that I am using for this analysis, less burdensome regulation actually equates to a higher score, as higher levels of burden are considered a negative attribute. Therefore, a negative coefficient actually means that countries with a better score in this category, in other words, less burdensome regulation, had lower emigration rates of low-skilled labor than countries with high levels of burden. Note that 'burden' does not necessarily equate to 'amount' of regulation. It also includes aspects such as speed of acquiring necessary permits, for example. The result indicates that it is actually low-skilled individuals that are affected the most by excessive regulation, as this variable did not appear to have a significant effect in the other two iterations of the model.  
+
+\vspace{.5cm}'Enrollment in tertiary education' had a positive effect on low-skilled rates and a negative effect on high-skilled rates. This variable is defined as the percentage of people enrolled in tertiary education, which is defined as those in an educational program beyond high school. This variable is scored with positive normalization, so higher rates of those enrolled in such programs correspond to a higher score. Thus, a positive coefficient indicates that having a higher percentage of the populace enrolled in a beyond-college program  actually increases the rate of emigration. We observe this phenomena with low-skilled emigration. This could be telling us that if it becomes more necessary in society to attain an education beyond high school, people who cannot do so are more likely to leave their home country due to a lack of opportunity. We see the opposite trend when it comes to high-skilled people. The reasoning could be identical to that of the reasoning as to why the low-skilled coefficient is negative; the society in which people are native too possesses disproportionate opportunities for those with higher education relative to those without. Additionally, it could also indicate that a greater investment in post-secondary institutions by a society encourages those with greater ability to stay in their home countries.
+
+\vspace{.5cm}‘Trade Weighted Average Tariff Rate‘ only has a significant impact on low-skilled rates. The scaling for this variable is such that states with lower weighted average tariff rates had a higher score on the 1-to-7 scale. The coefficient for the low-skilled iteration is positive, indicating that countries with lower average weighted tariffs actually had higher emigration rates of low-skilled individuals. This could be due to the fact that tariff are often places on imports in order to protect local industry, which disproportionately employs low-skilled labor. Thus, with  stronger domestic industry in fields like manufacturing and agriculture, there are more economic opportunities for those without high education, hence why there are less likely to emigrate than those in counties who do not make as much of an effort to protect domestic industry.
+
+\vspace{.5cm}‘Financing Through Local Equity Market‘ is essentially a measure of how easy it is to raise money by issuing shares on the stock market. A higher score on the scale indicates more ease. This category shows a significantly negative relationship with emigration rates at all skill levels, and it is the only significant determinant of emigration among medium-skilled migrants at 95% confidence level or greater. This could indicate that lower levels of regulation of a country's stock market translates to greater economic opportunity for all citizens. 
+
+\vspace{.5cm}Another notable result is that in the medium-skilled iteration, the coefficient for 'domestic credit to private sector, % of GDP' has a significantly positive effect on emigration rates. This is a surprising result. The variable essentially measures financial resources provided to the private sector by financial corporations, such as through loans, purchases of nonequity securities, trade credits and other accounts receivable, that establish a claim for repayment. A higher percentage reflects a more active banking sector in which more people and organizations take out more loans, increasing economic activity.A higher country score corresponds to a higher percentage. The positive coefficient in the beta regression for med-skilled emigrants actually implies that a higher ratio, which is generally considered a positive economic indicator, leads to higher emigration rates of medium-skilled labor.  The coefficient is low, however, and the significance level is only .1. Thus, it is possible that the coefficient is overstated. 
+
+
+\vspace{.5cm}As previously mentioned, the variable, ‘Financing Through Local Equity Market,‘ had a significant effect on med-skilled emigration. This indicates that, even though med-skilled individuals are more likely to make a decision of whether or not to emigrate than high-skilled individuals based on the factors in the model, they are not quite as affected by environments which do not have as much of a direct effect on their finances. This could illustrate that people at this skill level, who typically would be in the middle in terms of income among the three skill levels, are financially comfortable enough to be unaffected by certain policy changes, yet are not so affluent that they are able to seize on certain economic opportunities, either foreign or domestic. 
+
+## Beta Regression Results
+
+|     The second group of models I construct are beta regression models. Beta Regressions are a relatively new type of model, but they are highly effective at modeling proportional data that falls between 0 and 1 in which no values fall on either 0 or 1. This type of model is also useful in accounting for variable skewness (Ferrari & Cribari-Neto, 2004). By default, R, which I use to run the model, uses a logit-link function in the beta regression. Because it handles skewness of the dependent variable, I do not have to use the transformed data for this model. I opt to use this type of regression because it is more effective at determining the significance and sign of the model coefficients. However, the trade-off in using this model is that it is more difficult to accurately interpret the actual value of the coefficients (Cribari-Neto & Zeileis, 2010). This is why I use both sets of models. The following is the output from the beta regression for all three skill levels: 
+\vspace{.5cm}
+```{r betareg, message=FALSE, warning=FALSE, echo=FALSE, results='asis'}
+library(betareg)
+mlb <- betareg(Low_All~`Political Stability`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabl2)
+mmb <- betareg(Med_All~`Political Stability`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabm2)
+mhb <- betareg(High_All~`Political Stability`+`Burden of Government Regulation`+`Education Expenditure as a% of GNI`+`Enrollment in Tertiary Education`+`Research and Development Expenditure(% of GDP)`+`Trade Weighted Average Tariff Rate`+`Total Business Density`+`Gini Coefficient`+`Domestic Credit to Private Sector (%GDP)`+`Financing Through Local Equity Market`, tabh2)
+model.bet = list(mlb, mmb, mhb)
+stargazer::stargazer(mlb,
+          mmb,
+          mhb,
+          title="Beta Regression Results by Skill Level",
+          type = "latex",
+          float = TRUE,
+          report = "vcs*",
+          no.space = TRUE,
+          header=FALSE,
+          single.row = TRUE,
+          font.size = "small",
+          intercept.bottom = F,
+          column.labels = c("Low Skilled", "Med Skilled", "High Skilled"),
+          column.separate = c(1,1, 1),
+          digits = 2,
+          t.auto = F,
+          p.auto = F,
+          notes.align = "l",
+          notes.append = TRUE
+          )
+```
+\vspace{.5cm}The results of the Beta Regression are remarkably consistent with the OLS model. Similar to the previous model, the Beta Regression indicates that the lower one's skill level, the more factors there are that could influence their decision to emigrate. The log-likelihood in this model also decreases as the skill level increases, which corroborates the findings from the previous model that it may be more difficult for certain economic environments to affect one's decision to emigrate if they have a higher skill level. Again, this could be because if one has more in-demand skills, they are more likely to have a higher income, which will allow one to adapt more effectively to a changing economic and political landscape. The R-squared values are quite similar as well, again displaying the pattern that the higher one's skill level, the less the model is able to explain the variation in that skill level's emigration rates. 
+
+\vspace{.5cm}Like in the previous model, 'burden of government regulation' had a negative relationship with the emigration rate of low skilled labor. In the context of the model, if a country has a higher score in 'burden of government regulation,' that is to say, if a country has less burdensome regulation, they will have a lower emigration rate of low-skilled individuals.'Enrollment in tertiary education' has a positive coefficient for low skilled emigration rates, and a negative coefficient for high-skilled emigration rates. Similar to the previous model, this indicates that if country has a higher percentage of the population enrolled in an educational program beyond high school, low-skilled emigration increases, and high-skilled emigration decreases. 'Trade weighted average tariff rate' also remains consistent, with lower tariffs (indicated by a higher country score) having a positive effect on low-skilled emigration rates. The coefficient or 'domestic credit to private sector, % of GDP) remains significantly negative at a .1 level-another surprising results. This should cause some doubt that the coefficient in the OLS model is actually understated. 
+
+\vspace{.5cm} 'Financing through local equity market exhibited a minor change from the OLS model. In the Beta Regression, this variable is significant only for the medium-skilled and high-skilled iterations. Although, the coefficient for the low-skilled model is still negative.  The coefficients of the medium and high-skilled model iterations remain negative however. The difference between the two models in this regard could indicate that low-skilled individuals are not as affected by the difficulty or lack thereof of being able to trade stocks. This is supported by the fact that in the OLS model, where this variable is significant in the low-skilled iteration, the coefficient still has an absolute value less than the other two skills levels. This conclusion would make practical sense intuitively. People with low-skills typically earn less income and would have fewer assets affected by stock market regulations or fluctuations. However, as the performance of the stock market often affects the very jobs that low-skilled individuals work, I would think that the model is not correct in the result that there is no significant effect of 'financing through the local equity market' on the emigration rates of low-skilled labor. Perhaps the effect is relatively small compared to the other two skill-levels, but the OLS model shows that there is likely at least some small effect.
+
+\vspace{.5cm}Overall, the results of the Beta Regression model largely coincide with that of the OLS model. With the exception of 'financing through local equity market' on the low skilled iteration, both models had identical levels of significance and coefficient directions. With both models producing such similar results, meaningful conclusions can be reasonably drawn from them. 
+
+## Additional Considerations
+|     The models used in this analysis are not perfect. There are some potential flaws that must be highlighted for the sake of transparency. The sample size is small for the number of independent variables examined. This is why the OLS model had a low Adjusted R-Square value. The Beta Regression coefficients' values are difficult to interpret, though the consistency with the OLS model alleviates this flaw somewhat. 
+
+\vspace{.5cm}Additionally, the definitions of high, low, and medium skilled are based on a specific degree of educational attainment rather than the education percentiles in each country. For example, a high-school graduate from the United Kingdom would be of a significantly higher percentile in the education distribution of Botswana than in his native U.K, since more U.K. citizens graduate high school per capita. While this could be seen as a potential issue, it is better than using educational distributions themselves, because someone in the top third of the educational distribution in Botswana might be considered high-skilled there, but would not be able to cut it as high-skilled in the U.k., and as such, would not emigrate, not due to the factors in the model, but because they are not actually high-skilled. Thus, using a specific level of educational attainment is better, as it can be used a a proxy signifying an "absolute" level of skill rather than a relative skill level to a host country. 
+
+\vspace{.5cm}The emigration rates also do not differentiate the quality of secondary institutions, and those with associate's degrees are in the same category as those with master's and doctorate degrees. While this might not be such a problem when examining countries in which the number of postgraduate degree holders is small, in first world countries where there is a significant earnings gap between associate's and master's degree holders, not differentiating the type of degree could impact the results of the models. If such data was available, I would have utilized it.   
+
+## Conclusions
+
+|     Based on the factors in both models, it is easier to change the emigration rates of people with lower levels of skills. This is likely because people with higher skill levels have more of a stake in the society in which they are living in than do people at lower skill levels. This idea of higher skills people having a higher stake in their country of origin is also reflected in the 'financing through local equity market' variable. Both models show that medium and high-skilled individuals are influenced not to emigrate if asset trading is easier in their country. As low-skilled individuals do not have as much income on average, they have a lower stake in their local market and thus are not as tied to their country, at least economically. This explains why there are more factors which influence low-skilled emigration that the other two skill levels. 
+
+\vspace{.5cm}One of these factors that heavily influence low-skilled emigration rates are tariff rates. Even though tariffs are generally considered net economic drains, in a situation in which a state desires to maintain a larger low-skilled labor pool, it may not be the worst decision to place tariffs  on goods in which local industries typically rely on low-skilled labor to produce. Intuitively, although this could lead to more expensive goods, the trade off is likely still worth it for low-skilled workers, if emigration rates are am accurate depiction of their revealed preferences. Indeed, it is more beneficial for those workers to be able to work these sort of manufacturing or agricultural jobs and live with higher prices than it is for them to not have jobs at all, or work in lower-paying service-based jobs, such as a cashier, and as such not even be able to afford goods, even if they would be cheaper without the tariffs in place. Essentially, it is possible that the price increases caused by tariffs hurt consumers overall, but the domestic jobs which they can help protect disproportionately benefit low-skilled laborers and thus low-income earners. 
+
+\vspace{.5cm} A higher percentage of people enrolled in tertiary education likely reflects that a particular country has an economy in which it is necessary to acquire higher levels of skills in order to be competitive in the labor market. Thus, there are fewer opportunities for those with lower skills levels and more for those with higher skill levels. This is illustrated by the models in that low-skilled emigration rates are positively correlated with enrollment, while high-skilled rates are negatively correlated with it. This is odd, considering one would expect the innovation created by a higher concentration of high-skilled labor to have the positive externally of creating new types of jobs that could be filled by the low-skilled labor. It could be that the effect of such externalizes are overstated. If a country desires to retain high-skilled talent, it could be worth it to invest in higher education and create a labor pool in which technology firms and other industries which demand university educations can find a sizable number of suitably skilled workers.
+
+\vspace{.5cm} Lastly, both models illustrated the positive effect of 'domestic credit to private sector, % of GDP' on medium-skilled emigration rates. This result should not be ignored, and further research should be conducted based on the result. Although a higher percentage is considered a positive indicator of economic health, it is possible that the negative trade-offs of having an economy with high levels of debt disproportionately effect those with medium skill levels. The result begs the question of how this can contribute to higher emigration rates, however. This is a result which necessitates further research.
+
+## Bibliography
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\noindent
+
+Bang, J. T., &  Mitra, A. (2013). Civil war, ethnicity, and the migration of skilled labor. Eastern Economic Journal, 39(3), 387-401.
+
+Bhagwati, Jagdish N. and Koichi, (1974). “The Brain Drain, International Integration of Markets for Professionals and Unemployment,” Journal of Development Economics, 1974, 1, 19–42.
+  
+Brücker H., Capuano, S. and Marfouk, A. (2013). Education, gender and international migration: insights from a
+  panel-dataset 1980-2010, mimeo.
+
+Clemens, M. A. (2011). The financial consequences of high-skill emigration: lessons from African doctors abroad. Diaspora for development in Africa, 476882-1157133580628.
+
+Cortes, P. (2008). "The Effect of Low‐Skilled Immigration on U.S. Prices: Evidence from CPI Data," Journal of Political   Economy, 116(3), 381–422. https://doi.org/10.1086/589756.
+
+Cribari-Neto, F., & Zeileis, A. (2010). Beta Regression in R. Journal of Statistical Software, 34(2), 1–24. https://doi.org/10.18637/jss.v034.i02
+ 
+
+Ferrari, S.L.P. and Cribari-Neto, F. (2004) Beta regression for modeling rates
+and proportions. Journal of Applied Statistics, 31(7):799–815.
+
+INSEAD and WIPO,(2010). "The Global Innovation Index, 2009-10," Confederation of Indian Industry
+
+Kazlauskienė, A., & Rinkevičius, L. (2006). Lithuanian “brain drain” causes: Push and pull factors. Engineering economics, 46(1), 27-37.
+
+Martin, D., & Termos, A. (2015). Does a high minimum wage spur low-skilled emigration?. Economics Letters, 137, 200-202.
+
+OECD (2019), PISA 2018 Results (Volume II): Where All Students Can Succeed, PISA, OECD Publishing, Paris, 
+  https://doi.org/10.1787/b5fd1b8f-en
+
+## Appendix
+| Variable Name | Definition |
+|-------------------|---------------------------------------------------------------------------------------------------|
+|Burden of Government Regulation| How burdensome is it for businesses in your country to comply with governmental administrative requirements (e.g. permits, regulations, reporting)? 1 = Extremely burdensome, 7 = Not burdensome at all (Executive Opinion Survey, World Economic Forum)|
+| | |
+|Domestic credit to private sector (% of GDP)| Domestic credit to private sector refers to financial resources provided to the private sector, such as through loans, purchases of non-equity securities, and trade credits and other accounts receivable, that establish a claim for repayment. For some countries these claims include credit to public enterprises.|
+| | |
+|Education Expenditure as a % of GNI| Education Expenditure (% of GNI) for the year|
+| | |
+|Emigration Rates|total migrant population from a given source country divided by the sum of the migrant and resident population in the same source country| 
+| | |
+|Enrollment in tertiary education| The reported value corresponds to the total enrollment in tertiary education expressed as a percentage of the population of the five-year age group following on from the secondary school-leaving age.|
+| | |
+|Extent of Staff Training| To what extent do companies in your country invest in training and employee development? 1 = Hardly at all, 7 = To a great extent (Executive Opinion Survey, World Economic Forum)|
+| | |
+|Financing Through Local Equity Market| How easy is it to raise money by issuing shares on the stock market in your country? 1 = Very difficult, 7 = Very easy (Executive Opinion Survey, World Economic Forum)|
+| | |
+|Gini Index| The Gini coefficient is a measure of inequality in the economy. It can range from 0 to 1; it is sometimes multiplied by 100 to range between 0 and 100. A low Gini coefficient indicates a more equal distribution, with 0 corresponding to perfect equality, while higher Gini coefficients indicate more unequal distribution, with 1 corresponding to perfect inequality|
+| | |
+|Government Effectiveness| This index combines into one grouping perceptions of the quality of the public service provision, the quality of bureaucracy, the competence of civil servants, The independence of the civil service from the political pressures, and the credibility of the governments commitment to policies.|
+| | |
+|Local Availability of Specialized Research and Training Services| In your country, to what extent are high quality specialized training services available? 1= not available, 7= widely available.(Executive Opinion Survey, World Economic Forum)|
+| | |
+|Political Stability| This index combines several indicators which measure perceptions of the likelihood that the government in power or overthrown by possibly unconstitutional means and/or violent means. This  index captures the idea that the quality of governance is compromised by the likelihood of wrenching  changes in the government, which not only has a direct effect on the continuity of policies, but also at the deeper level undermines the ability of the citizens to peacefully select and replace those in power|
+| | |
+|Public Research and Development as a % of GDP| This is calculated by dividing total annual R&D expenditure in the public sector and the private sector such as businesses, public research institutes, and universities, by the year’s GDP.|
+| | |
+|Regulatory Quality| This indicator measures the incidence of the market unfriendly policies such as price controls or inadequate bank supervision , as well as the perception of the burdens imposed by excessive regulation in areas such as foreign trade and business development.|
+| | |
+|Trade Weighted Average Tariff Rates| This indicator is calculated as the average of the applied tariff rates, including preferential rates that a country applies to the rest of the world. The trade pattern of the importing country’s reference group (2007 data) is used as a weighting|
+| | |
+|Total Business Density| Business Density is the number of total registered corporations divided by total working age population.|
+
